@@ -1,0 +1,40 @@
+# cli-intercepts denylist — one bash-regex per line. Comments (#) and blanks ignored.
+# Matched against a whitespace-normalized version of the Bash tool command.
+# Tune freely: the goal is zero false-negatives on destructive ops.
+
+# --- S3 destructive syncs/removes ---
+# Broad: any `aws s3 rm` targeting a bucket/prefix. Model can route around a
+# narrow `--recursive`-only rule by deleting objects one at a time.
+aws s3 sync .* --delete
+aws s3 rm +s3://
+aws s3api delete-object( |$)
+aws s3api delete-objects( |$)
+aws s3api delete-bucket
+aws s3 rb .* --force
+
+# --- Filesystem destruction ---
+rm -rf( +--no-preserve-root)? +/( |$)
+rm -rf +~( |/|$)
+rm -rf +\$HOME( |/|$)
+
+# --- Git footguns ---
+git push .* --force( |$)
+git push .* -f( |$)
+git reset --hard +origin
+git clean -[fdx]+ +/
+git branch -D +(main|master)
+
+# --- Database destruction ---
+DROP DATABASE
+TRUNCATE TABLE
+psql .* -c .*DROP
+dropdb +
+
+# --- Package/registry publish (usually wants confirmation) ---
+npm publish( |$)
+pnpm publish( |$)
+cargo publish( |$)
+
+# --- Terraform/infra destruction ---
+terraform destroy( |$)
+kubectl delete +namespace
