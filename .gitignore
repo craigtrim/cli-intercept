@@ -1,3 +1,15 @@
 config.sh
 tests/test_guard_live.py
 tests/test_guard_e2e.py
+
+# Sandbox config holds AWS profile/bucket details for the user's env.
+src/cli_intercepts/sandbox/config.py
+
+# Build artefacts and run reports.
+reports/
+dist/
+build/
+*.egg-info/
+.venv/
+__pycache__/
+*.pyc
