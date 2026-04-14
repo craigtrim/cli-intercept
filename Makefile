@@ -10,7 +10,7 @@ LOG       := $(HOME)/.claude/guards/blocked.log
 
 .DEFAULT_GOAL := help
 
-.PHONY: help install uninstall reinstall test denylist settings log log-tail log-clear status clean deps sandbox sandbox-list
+.PHONY: help install uninstall reinstall test denylist settings log log-tail log-clear status clean deps sandbox sandbox-list gain test-py
 
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -58,6 +58,12 @@ sandbox-list: ## List registered adversarial probes
 
 sandbox: ## Run the adversarial sandbox (override vars: N=3 PROBES=direct,polite)
 	@poetry run sandbox --n $${N:-1} $${PROBES:+--probes $$PROBES}
+
+gain: ## Summarize blocked-command history (override: ARGS="--since 7d")
+	@poetry run gain $${ARGS}
+
+test-py: ## Run the python unit tests
+	@poetry run pytest tests/ -v
 
 clean: ## Remove Python caches and build artefacts
 	@find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; true

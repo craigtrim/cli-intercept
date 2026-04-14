@@ -11,12 +11,13 @@ dependencies = []
 
 [project.scripts]
 sandbox = "cli_intercepts.sandbox.cli:main"
+gain = "cli_intercepts.gain:main"
 
 [tool.poetry]
 packages = [{ include = "cli_intercepts", from = "src" }]
 
 [tool.poetry.group.dev.dependencies]
-# Intentionally empty. Add `pytest`, `boto3`, etc. here when needed.
+pytest = "^8.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
