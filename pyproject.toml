@@ -1,0 +1,23 @@
+[project]
+name = "cli-intercepts"
+version = "0.1.0"
+description = "Deterministic guardrails for Claude Code — PreToolUse hook + adversarial test sandbox."
+authors = [
+    { name = "Craig Trim", email = "craigtrim@gmail.com" },
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+sandbox = "cli_intercepts.sandbox.cli:main"
+
+[tool.poetry]
+packages = [{ include = "cli_intercepts", from = "src" }]
+
+[tool.poetry.group.dev.dependencies]
+# Intentionally empty. Add `pytest`, `boto3`, etc. here when needed.
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

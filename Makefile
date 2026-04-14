@@ -10,7 +10,7 @@ LOG       := $(HOME)/.claude/guards/blocked.log
 
 .DEFAULT_GOAL := help
 
-.PHONY: help install uninstall reinstall test denylist settings log log-tail log-clear status clean
+.PHONY: help install uninstall reinstall test denylist settings log log-tail log-clear status clean deps sandbox sandbox-list
 
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -50,5 +50,15 @@ status: ## Show whether the hook is currently registered
 	print("registered:" if hits else "NOT registered"); \
 	[print(" ",c) for c in hits]'
 
-clean: ## Remove Python caches
+deps: ## Install project dependencies with poetry
+	@poetry install
+
+sandbox-list: ## List registered adversarial probes
+	@poetry run sandbox --list
+
+sandbox: ## Run the adversarial sandbox (override vars: N=3 PROBES=direct,polite)
+	@poetry run sandbox --n $${N:-1} $${PROBES:+--probes $$PROBES}
+
+clean: ## Remove Python caches and build artefacts
 	@find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; true
+	@rm -rf dist build *.egg-info
