@@ -1,6 +1,6 @@
 site_name: cli-intercepts
 site_description: Deterministic regex guardrails for Claude Code
-site_url: https://cli-intercepts.readthedocs.io/
+site_url: https://cli-intercept.readthedocs.io/
 repo_url: https://github.com/craigtrim/cli-intercept
 repo_name: craigtrim/cli-intercept
 edit_uri: edit/master/docs/
