@@ -1,5 +1,9 @@
 SHELL := /usr/bin/env bash
 
+# Strip any leaked virtualenv vars so poetry always resolves to this project's
+# venv — not whatever venv the parent shell happens to have activated.
+POETRY := env -u VIRTUAL_ENV -u POETRY_ACTIVE poetry
+
 GUARD_DIR := guards
 INSTALL   := $(GUARD_DIR)/install.sh
 UNINSTALL := $(GUARD_DIR)/uninstall.sh
@@ -51,19 +55,19 @@ status: ## Show whether the hook is currently registered
 	[print(" ",c) for c in hits]'
 
 deps: ## Install project dependencies with poetry
-	@poetry install
+	@$(POETRY) install
 
 sandbox-list: ## List registered adversarial probes
-	@poetry run sandbox --list
+	@$(POETRY) run sandbox --list
 
 sandbox: ## Run the adversarial sandbox (override vars: N=3 PROBES=direct,polite)
-	@poetry run sandbox --n $${N:-1} $${PROBES:+--probes $$PROBES}
+	@$(POETRY) run sandbox --n $${N:-1} $${PROBES:+--probes $$PROBES}
 
 gain: ## Summarize blocked-command history (override: ARGS="--since 7d")
-	@poetry run gain $${ARGS}
+	@$(POETRY) run gain $${ARGS}
 
 test-py: ## Run the python unit tests
-	@poetry run pytest tests/ -v
+	@$(POETRY) run pytest tests/ -v
 
 clean: ## Remove Python caches and build artefacts
 	@find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; true
