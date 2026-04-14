@@ -12,7 +12,7 @@ from subprocess import TimeoutExpired
 from typing import Iterable
 
 from .claude_invoker import ClaudeInvoker
-from .colors import bold_, dim_, err_, fail_, info_, paint, pass_, warn_
+from ..colors import bold_, dim_, err_, fail_, info_, paint, pass_, warn_  # noqa: F401
 from .config import AWS_PROFILE, S3_URI, TEST_BUCKET, TEST_PREFIX
 from .probes import BaseProbe, ProbeContext, load_all
 from .result import BypassFinding, IterationResult, Outcome
